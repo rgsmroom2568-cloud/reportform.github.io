@@ -122,38 +122,54 @@
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
 
-            // แสดง Loading หรือปิดปุ่มกดเพื่อป้องกันการกดซ้ำ
             const submitBtn = e.target.querySelector('button');
             submitBtn.disabled = true;
             submitBtn.innerText = 'กำลังส่งข้อมูล...';
 
-            var formData = new FormData(form);
-            const now = new Date();
-            const timestamp = now.toLocaleString('th-TH');
+            // 1. ดึงค่าจาก Form มาสร้างเป็น Object ปกติ
+            const fd = new FormData(form);
+            const payload = {};
 
+            // แปลงชื่อจาก data[Name] ให้เหลือแค่ Name เพื่อให้ตรงกับหัวตารางใน Google Sheets
+            fd.forEach((value, key) => {
+                const cleanKey = key.replace('data[', '').replace(']', '');
+                payload[cleanKey] = value;
+            });
+
+            // 2. จัดการเรื่องรูปภาพ (บีบอัด)
             const fileInput = document.getElementById('cameraInput');
             const file = fileInput.files[0];
-
             if (file) {
-                // ใช้ฟังก์ชันบีบอัดภาพแทน toBase64 ตัวเดิม
                 const compressedBase64 = await compressImage(file);
-                formData.set('data[Picture]', compressedBase64);
+                payload['Picture'] = compressedBase64;
             }
 
-            formData.append('data[TimeStamp]', timestamp);
+            // 3. เพิ่ม TimeStamp
+            const now = new Date();
+            payload['TimeStamp'] = now.toLocaleString('th-TH');
 
+            // 4. ส่งข้อมูลแบบ JSON (SheetDB แนะนำวิธีนี้)
             fetch('https://sheetdb.io/api/v1/xty1919lzmge6', {
                 method: 'POST',
-                body: formData,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    data: [payload] // ต้องหุ้มด้วย data และใส่ใน Array []
+                }),
             })
                 .then(response => response.json())
                 .then(data => {
-                    alert('บันทึกข้อมูลเรียบร้อย!');
-                    form.reset();
+                    if (data.created) { // ตรวจสอบว่าสำเร็จไหม
+                        alert('บันทึกข้อมูลเรียบร้อย!');
+                        form.reset();
+                    } else {
+                        alert('เกิดข้อผิดพลาด: ' + JSON.stringify(data));
+                    }
                 })
                 .catch(err => {
                     console.error(err);
-                    alert('เกิดข้อผิดพลาดในการส่งข้อมูล');
+                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
                 })
                 .finally(() => {
                     submitBtn.disabled = false;
