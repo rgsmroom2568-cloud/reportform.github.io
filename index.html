@@ -17,179 +17,99 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="style.css">
+
     <style>
-        body {
-    font-family: 'Kanit', sans-serif;
-    background-color: #f8f9fa;
-}
+        /* สไตล์สำหรับ Card Container ที่ใช้ Grid ของ Bootstrap */
+        .card-container {
+            margin-top: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-.form-container {
-    max-width: 600px;
-    margin-top: 50px;
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
+        /* สไตล์ Card สำหรับลูกเล่นเงา/เด้ง */
+        .custom-card {
+            text-align: center;
+            /* ลบ padding เดิมออกเพื่อให้รูปภาพขยายเต็ม */
+            padding: 5px;
+            /* เพิ่ม padding เล็กน้อยเพื่อให้มีขอบรอบรูป */
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            border: none;
+            height: 100%;
+            opacity: 95%;
+        }
 
+        /* ลูกเล่น: เงาเข้มขึ้นและเด้งขึ้นเมื่อเมาส์ชี้ */
+        .card-link:hover .custom-card {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+            transform: translateY(-8px);
+        }
 
-@media (max-width: 400px) {
-    .form-container {
-        max-width: 400px;
-        margin-top: 30px;
-        background: white;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-}
+        /* สไตล์สำหรับลิงก์ที่หุ้ม Card */
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            height: 100%;
+        }
+
+        /* ************************************************** */
+        /* NEW: Wrapper ที่กำหนดความสูงและควบคุมการจัดรูปภาพ */
+        /* ************************************************** */
+        .card-img-wrapper {
+            height: 180px;
+            /* เพิ่มความสูงของ Wrapper เพื่อรองรับรูปภาพที่ใหญ่ขึ้น */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* ไม่มี margin-bottom เพราะไม่มีหัวข้อแล้ว */
+        }
+
+        /* สไตล์ของรูปภาพภายใน Wrapper */
+        .card-img-wrapper img {
+            width: 100%;
+            /* ทำให้รูปภาพยืดเต็มความกว้างของ Card-Wrapper */
+            max-width: 180px;
+            /* กำหนดขนาดสูงสุดของรูปภาพในแนวตั้ง */
+            height: auto;
+            display: block;
+            margin: 0;
+            /* ใช้ object-fit: contain; เพื่อให้แน่ใจว่ารูปภาพจะไม่ถูกตัด แต่จะถูกปรับขนาดให้พอดีกับพื้นที่ Wrapper */
+            object-fit: contain;
+        }
     </style>
 </head>
 
 <body>
-
-    <div class="container-sm d-flex justify-content-center">
-        <div class="form-container w-70">
-            <h2 class="mb-4 text-center">แบบฟอร์มรายงาน</h2>
-            <form id="reportForm">
-                <div class="mb-3">
-                    <label class="form-label">ชื่อผู้ตรวจ</label>
-                    <input type="text" class="form-control" name="data[Name]" placeholder="ระบุชื่อ-นามสกุล" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">แผนก</label>
-                    <input type="text" class="form-control" name="data[Department]" placeholder="ระบุแผนก" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">สถานที่</label>
-                    <input type="text" class="form-control" name="data[Location]" placeholder="ระบุสถานที่" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">สภาพเครื่องคอมพิวเตอร์</label>
-                    <input type="text" class="form-control" name="data[PC_Condition]" placeholder="ระบุสภาพเครื่อง"
-                        required>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">สถานะพัดลม</label>
-                        <input type="text" class="form-control" name="data[Fan]" placeholder="ปกติ/ผิดปกติ" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">เสียงตัวเครื่อง</label>
-                        <input type="text" class="form-control" name="data[Noise]" placeholder="มีเสียง/ไม่มีเสียง"
-                            required>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label">ระดับฝุ่น</label>
-                    <select class="form-select" name="data[Dirt_Level]" required>
-                        <option value="" selected disabled>กรุณาเลือกระดับของฝุ่น</option>
-                        <option value="สะอาด">สะอาด</option>
-                        <option value="มีฝุ่นเล็กน้อย">มีฝุ่นเล็กน้อย</option>
-                        <option value="มีฝุ่นมาก">มีฝุ่นมาก</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">คอมพิวเตอร์ช้าหรือค้างหรือไม่</label>
-                    <input type="text" class="form-control" name="data[Lagging]">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">วันประชุม</label>
-                    <input type="date" name="data[Date]" class="form-control mb-3" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="cameraInput" class="form-label">รูปถ่ายเครื่องคอมพิวเตอร์</label>
-                    <input type="file" class="form-control" id="cameraInput" name="data[Picture]" accept="image/*"
-                        capture="camera">
-                </div>
-
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary btn-lg">ส่งข้อมูล</button>
-                </div>
-            </form>
+    <div class="container-sm">
+        <div class="cc-center">
+            <h1>RGS Computer</h1>
+            <H2>Report Form</H2>
         </div>
+
+        <div class="col card-container">
+            <a href="form.html" class="card-link" title="Cassavaplus / RGE">
+                <div class="card custom-card shadow-sm rounded">
+                    <div class="card-img-wrapper">
+                        <h1>Form Report</h1>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col card-container">
+            <a href="wiuser.html" class="card-link" title="Cassavaplus / RGE">
+                <div class="card custom-card shadow-sm rounded">
+                    <div class="card-img-wrapper">
+                        <h1>คู่มือเบื้องต้นของการใช้งานและแก้ปัญหาคอมพิวเตอร์</h1>
+                    </div>
+                </div>
+            </a>
+        </div>
+
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        // ฟังก์ชันบีบอัดรูปภาพให้ขนาดเล็กลงก่อนส่ง
-        const compressImage = (file) => {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 600; // ตั้งค่าความกว้างสูงสุดที่ต้องการ
-                        const scaleSize = MAX_WIDTH / img.width;
-                        canvas.width = MAX_WIDTH;
-                        canvas.height = img.height * scaleSize;
-
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-                        // แปลงเป็น Base64 โดยลดคุณภาพลงเหลือ 0.7 (70%)
-                        const base64 = canvas.toDataURL('image/jpeg', 0.7);
-                        resolve(base64);
-                    };
-                };
-            });
-        };
-
-        var form = document.getElementById('reportForm');
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            // แสดง Loading หรือปิดปุ่มกดเพื่อป้องกันการกดซ้ำ
-            const submitBtn = e.target.querySelector('button');
-            submitBtn.disabled = true;
-            submitBtn.innerText = 'กำลังส่งข้อมูล...';
-
-            var formData = new FormData(form);
-            const now = new Date();
-            const timestamp = now.toLocaleString('th-TH');
-
-            const fileInput = document.getElementById('cameraInput');
-            const file = fileInput.files[0];
-
-            if (file) {
-                // ใช้ฟังก์ชันบีบอัดภาพแทน toBase64 ตัวเดิม
-                const compressedBase64 = await compressImage(file);
-                formData.set('data[Picture]', compressedBase64);
-            }
-
-            formData.append('data[TimeStamp]', timestamp);
-
-            fetch('https://sheetdb.io/api/v1/xty1919lzmge6', {
-                method: 'POST',
-                body: formData,
-            })
-                .then(response => response.json())
-                .then(data => {
-                    alert('บันทึกข้อมูลเรียบร้อย!');
-                    form.reset();
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert('เกิดข้อผิดพลาดในการส่งข้อมูล');
-                })
-                .finally(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = 'ส่งข้อมูล';
-                });
-        });
-    </script>
 </body>
 
 </html>
-
-
-
