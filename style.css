@@ -1,6 +1,8 @@
 body {
     font-family: 'Kanit', sans-serif;
     background-color: #f8f9fa;
+    background-image: url('https://cdn.jsdelivr.net/gh/rgsmroom2568-cloud/images/BackGround.jpg');
+    text-align: center;
 }
 
 .form-container {
@@ -10,6 +12,10 @@ body {
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.cc-center {
+    margin-top: 10px;
 }
 
 
