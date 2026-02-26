@@ -104,7 +104,7 @@
                         const canvas = document.createElement('canvas');
 
                         // ปรับ MAX_WIDTH ลงเหลือ 400 (พอชัดสำหรับดูในตาราง)
-                        const MAX_WIDTH = 400;
+                        const MAX_WIDTH = 300;
                         const scaleSize = MAX_WIDTH / img.width;
                         canvas.width = MAX_WIDTH;
                         canvas.height = img.height * scaleSize;
@@ -114,7 +114,7 @@
 
                         // ปรับคุณภาพ (Quality) ลงเหลือ 0.4 (40%)
                         // ค่านี้จะช่วยให้รหัส Base64 สั้นลงอย่างมาก
-                        const base64 = canvas.toDataURL('image/jpeg', 0.4);
+                        const base64 = canvas.toDataURL('image/jpeg', 0.1);
 
                         // เช็คความยาวก่อนส่ง ถ้ายังเกิน 50,000 ให้แจ้งเตือน
                         if (base64.length > 50000) {
