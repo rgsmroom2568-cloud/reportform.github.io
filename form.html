@@ -102,7 +102,9 @@
                     img.src = event.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 600; // ตั้งค่าความกว้างสูงสุดที่ต้องการ
+
+                        // ปรับ MAX_WIDTH ลงเหลือ 400 (พอชัดสำหรับดูในตาราง)
+                        const MAX_WIDTH = 400;
                         const scaleSize = MAX_WIDTH / img.width;
                         canvas.width = MAX_WIDTH;
                         canvas.height = img.height * scaleSize;
@@ -110,14 +112,15 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                        // เปลี่ยนจาก 0.7 เป็น 0.5 หรือน้อยกว่าเพื่อความชัวร์
+                        // ปรับคุณภาพ (Quality) ลงเหลือ 0.4 (40%)
+                        // ค่านี้จะช่วยให้รหัส Base64 สั้นลงอย่างมาก
                         const base64 = canvas.toDataURL('image/jpeg', 0.4);
 
-                        // เช็คว่าถ้ายังเกิน 50,000 ตัวอักษร ให้แจ้งเตือนก่อนส่ง
+                        // เช็คความยาวก่อนส่ง ถ้ายังเกิน 50,000 ให้แจ้งเตือน
                         if (base64.length > 50000) {
-                            console.warn("Image still too large:", base64.length);
-                            // อาจจะลด MAX_WIDTH ลงเหลือ 400 ในรอบถัดไป
+                            alert("รูปภาพยังมีขนาดใหญ่เกินไป กรุณาลองถ่ายใหม่อีกครั้ง");
                         }
+
                         resolve(base64);
                     };
                 };
